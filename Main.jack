@@ -1,13 +1,14 @@
 class Main {
     function void main() {
-        var str;
-        
-        let str = "Hello World";
+        var Food f;
+        var Point p;
+        let f = Food.new(16);
+        let p = f.getPosition();
 
-        do Output.printString(str);
-        do Output.println(); 
-
-        str.dispose()
+        while (true){
+            do f.changePosition();
+            do f.draw();
+        }
 
         return; 
         }

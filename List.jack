@@ -1,0 +1,60 @@
+class List {
+
+    field Array Data;
+    field int Length;
+    field int Last;
+
+    constructor List new(){
+        let Length = 8;
+        let Last = 0;
+        let Data = Array.new(Length);
+        
+        return this;
+    } 
+
+    method void append(Point point){
+        if (Last = Length - 1){
+            do expand();
+        }
+
+        let Last = Last + 1;
+        let Data[Last] = point;
+
+        return;
+    }
+
+    method void expand(){
+        var Array newData;
+        var int newLength;
+        var int counter;
+
+        let newLength = Length * 2;
+        let newData = Array.new(newLength);
+        let counter = 0;
+
+        while (counter < Length){
+            let newData[counter] = Data[counter];
+            let counter = counter + 1;
+        }
+
+        let Length = newLength;
+        let Data = newData;
+
+        do newData.dispose();
+
+        return;
+    }
+
+    method Point get(int index){
+        return Data[index];
+    }    
+
+    method int getLength(){
+        return Length;
+    }
+
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+}

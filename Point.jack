@@ -1,0 +1,31 @@
+class Point{
+    field int X;
+    field int Y;
+
+    constructor Point new(int x, int y){
+        let X = x;
+        let Y = y;
+
+        return this;
+    }
+
+    method int getX(){
+        return X;
+    }
+
+    method int getY(){
+        return Y;
+    }
+
+    method void change(int x, int y){
+        let X = x;
+        let Y = y;
+
+        return;
+    }
+
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+}

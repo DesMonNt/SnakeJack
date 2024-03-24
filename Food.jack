@@ -1,0 +1,65 @@
+class Food{
+    field Point position;
+    field Random random;
+    field int size;
+
+    constructor Food new(int s){
+        var int seed;
+
+        let seed = 228;
+        let size = s;
+        let random = Random.new(seed);
+        let position = Point.new(0, 0);
+
+        do random.addCallTime(random);
+
+        return this;
+    }
+
+    method void changePosition(){
+        var int x, y;
+        var Point newPosition;
+
+        let x = random.randRange((512 - size) / size);
+        let y = random.randRange((256 - size) / size);
+        let x = size * x + size / 2;
+        let y = size * y + size / 2;
+
+        do position.change(x, y);
+
+        return;
+    }
+
+    method void draw(){
+        var int x, y;
+        
+        let x = position.getX();
+        let y = position.getY();
+
+        do Screen.setColor(true);
+		do Screen.drawCircle(x, y, size / 2);
+
+		return;
+    }
+
+    method void clear(){
+        var int x, y;
+        
+        let x = position.getX();
+        let y = position.getY();
+
+        do Screen.setColor(false);
+		do Screen.drawCircle(x, y, size / 2);
+
+		return;
+    }
+
+    method Point getPosition(){
+        return position;
+    }
+
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+}

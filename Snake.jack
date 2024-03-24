@@ -1,0 +1,41 @@
+class Snake{
+    field Point head;
+    field List tail;
+    field int direction;
+    field int size;
+    field boolean isAlive;
+
+    constructor Snake new(int s){
+        let size = s;
+        let head = Point.new(0, 0);
+        let tail = List.new();
+        let isAlive = true;
+        let direction = 0;
+
+        return this;
+    }
+
+    method void draw()
+    {
+        var Point position;
+        var int x, y, length;
+
+        let x = head.getX();
+        let y = head.getY();
+        let length = tail.getLength();
+
+        do Screen.drawRectangle(x, y, x + size / 2, y + size / 2);
+
+        while (length > 0){
+            let position = tail.get(length);
+            let x = position.getX();
+            let y = position.getY();
+            
+            do Screen.drawRectangle(x, y, x + size / 2, y + size / 2);
+
+            let length = length - 1;
+        }
+
+        return;
+    }
+}
