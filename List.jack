@@ -1,5 +1,4 @@
 class List {
-
     field Array Data;
     field int Length;
     field int Last;
@@ -49,8 +48,8 @@ class List {
         return Data[index];
     }    
 
-    method int getLength(){
-        return Length;
+    method int getCount(){
+        return Last + 1;
     }
 
     method void dispose(){
