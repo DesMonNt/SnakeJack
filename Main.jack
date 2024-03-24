@@ -1,0 +1,14 @@
+class Main {
+    function void main() {
+        var str;
+        
+        let str = "Hello World";
+
+        do Output.printString(str);
+        do Output.println(); 
+
+        str.dispose()
+
+        return; 
+        }
+}
