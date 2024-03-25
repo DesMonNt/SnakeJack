@@ -17,13 +17,6 @@ class Point{
         return Y;
     }
 
-    method void change(int x, int y){
-        let X = x;
-        let Y = y;
-
-        return;
-    }
-
     method void dispose(){
         do Memory.deAlloc(this);
         return;

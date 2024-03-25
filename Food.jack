@@ -6,10 +6,10 @@ class Food{
     constructor Food new(int s){
         var int seed;
 
-        let seed = 228;
+        let seed = 123;
         let size = s;
         let random = Random.new(seed);
-        let position = Point.new(0, 0);
+        let position = Point.new(size, size);
 
         do random.addCallTime(random);
 
@@ -25,7 +25,8 @@ class Food{
         let x = size * x + size / 2;
         let y = size * y + size / 2;
 
-        do position.change(x, y);
+        do position.dispose();
+        let position = Point.new(x, y);
 
         return;
     }
@@ -59,7 +60,10 @@ class Food{
     }
 
     method void dispose(){
+        do random.dispose();
+        do position.dispose();
         do Memory.deAlloc(this);
+
         return;
     }
 }

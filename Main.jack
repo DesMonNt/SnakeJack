@@ -1,13 +1,27 @@
 class Main {
     function void main() {
+        var Snake s;
+        var int i;
         var Food f;
-        var Point p;
-        let f = Food.new(16);
-        let p = f.getPosition();
 
-        while (true){
-            do f.changePosition();
+        let s = Snake.new(16);
+        let f = Food.new(16);
+        let i = 0;
+    
+        do s.setDirection(2);
+
+        while (i < 100){
+            if  (i < 3){
+                do s.grow();
+            }
+
+            let i = i + 1;
+
+            do Screen.clearScreen();
+            do s.move();
+            do s.draw();
             do f.draw();
+            do Sys.wait(500);
         }
 
         return; 

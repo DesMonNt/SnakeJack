@@ -1,3 +1,86 @@
 class Game{
+    field bool isAlive;
+    field int score;
+    field Snake snake;
+    field Food food;
+
+    constructor Game new(){
+        let isAlive = true;
+        let score = 0;
+        let snake = Snake.new(16); // How long?
+        let food = Food.new(16);
+
+        return this;
+    }
     
+    method void run(){
+        var char pressed;
+        var Point headLocation, foodLocation;
+        var int fx, fy, sx, sy;
+        var char resetOrfinish;
+        // Scoreboard draw (where?)
+
+        do food.draw();
+        do snake.draw();
+
+        while(isAlive){ // Check whether snake.isAlive
+            let pressed = Keyboard.keyPressed();
+
+			if (pressed = 131) {
+				do snake.setDirection(0);
+			}
+			if (pressed = 133) {
+				do snake.setDirection(1);
+			}
+			if (pressed = 130) {
+				do snake.setDirection(2);
+			}
+			if (pressed = 132) {
+				do snake.setDirection(3);
+			}
+
+				do snake.move(); // Add wall collision processing
+
+                let headLocation = snake.getHead();
+                let foodLocation = food.getPosition();
+
+                let fx = foodLocation.getX();
+                let fy = foodLocation.getY();
+                let sx = snakeLocation.getX();
+                let sy = snakeLocation.getY();
+                if (fx = sx){
+                    if (fy = sy){
+                        do food.changePosition();
+                        let score = score + 1;
+                        do snake.grow();
+                    }
+                }
+
+                // if left > sx or right < sx ... isAlive = 0
+        }
+
+        do snake.dispose();
+        do food.dispose();
+
+        while(~(resetOrfinish = 82) & ~(resetOrfinish = 140)) { // Determine logic of reset/exit keys
+				let resetOrfinish = Keyboard.keyPressed();
+        }
+        
+        if (resetOrfinish = 82) {
+            do reset();
+        }
+        if (resetOrfinish = 140) {
+            do Screen.clear();
+            return;
+        }
+
+        return;
+    }
+
+    method void reset(){
+        let score = 0;
+        do Screen.clear();
+
+        return;
+    }
 }

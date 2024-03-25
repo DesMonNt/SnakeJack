@@ -12,12 +12,12 @@ class List {
     } 
 
     method void append(Point point){
-        if (Last = Length - 1){
+        if (Last = Length){
             do expand();
         }
 
-        let Last = Last + 1;
         let Data[Last] = point;
+        let Last = Last + 1;
 
         return;
     }
@@ -26,7 +26,7 @@ class List {
         var Array newData;
         var int newLength;
         var int counter;
-
+    
         let newLength = Length * 2;
         let newData = Array.new(newLength);
         let counter = 0;
@@ -36,24 +36,41 @@ class List {
             let counter = counter + 1;
         }
 
+        do Data.dispose();
+
         let Length = newLength;
         let Data = newData;
-
-        do newData.dispose();
 
         return;
     }
 
     method Point get(int index){
         return Data[index];
+    }
+
+    method void set(int index, Point point){
+        let Data[index] = point;
+        return;
     }    
 
     method int getCount(){
-        return Last + 1;
+        return Last;
     }
 
     method void dispose(){
+        var int i;
+        var Point point;
+
+        while (i < Last + 1){
+            let point = Data[i];
+            do point.dispose();
+            
+            let i = i + 1;
+        }
+
+        do Data.dispose();
         do Memory.deAlloc(this);
+        
         return;
     }
 }

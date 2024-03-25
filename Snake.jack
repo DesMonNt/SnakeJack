@@ -4,12 +4,17 @@ class Snake{
     field int direction;
     field int size;
     field boolean isAlive;
-    field Point prevTail;
+    field boolean isGrowing;
 
     constructor Snake new(int s){
+        var Point tailTile;
+
         let size = s;
-        let head = Point.new(0, 0);
+        let head = Point.new(128, 128);
+        let tailTile = Point.new(128, 128 + size);
+
         let tail = List.new();
+
         let isAlive = true;
         let direction = 0;
 
@@ -17,90 +22,83 @@ class Snake{
     }
 
     method bool getCollisionWithSelf(){
-        var int length;
+        var int count;
         var Point checkPoint;
 
-        let length = tail.getCount() - 1; 
+        let count = tail.getCount() - 1; 
 
-        while (length > -1){
-            let checkPoint = tail.get(length);
+        while (count > -1){
+            let checkPoint = tail.get(count);
             if (head.getX() = checkPoint.getX()){
                 if (head.getY() = checkPoint.getY()){
                     return true;
                 }
             }
 
-            let length = length - 1;
+            let count = count - 1;
         }
         
         return false;
     }
 
     method void grow(){
-        var Point newTail;
-
-        let newTail = prevTail;
-        do tail.append(prevTail);
-
-        do newTail.dispose();
-
+        let isGrowing = true;
         return;
     }
 
-    method void move(int direction){
-        var int dx, dy, length;
+    method void move(){
+        var int x, y, dx, dy;
         var Point prevHead;
 
-        let dx = 0;
-        let dy = 0;
-        let length = tail.getCount();
-        let prevHead = head;
+        let x = head.getX();
+        let y = head.getY();
+        let prevHead = Point.new(x, y);
         
         if (direction = 0){
-            let dy = dy - 1;
+            let dy = -1 * size;
         }
 
         if (direction = 1){
-            let dy = dy + 1;
+            let dy = size;
         }
 
         if (direction = 2){
-            let dx = dx + 1;
+            let dx = size;
         }
 
         if (direction = 3){
-            let dx = dx - 1;
+            let dx = -1 * size;
         }
-        
-        do head.change(head.getX() + dx, head.getY() + dy);
-        let prevTail = tail.get(length - 1);
+
+        do head.dispose();
+        let head = Point.new(x + dx, y + dy);
 
         do updateTail(prevHead);
-        do prevHead.dispose();
 
         return;
     }
 
     method void updateTail(Point prevHead){
-        var int length;
+        var int i, count;
         var Point nextPoint, prevPoint;
 
-        let length = tail.getCount() - 1;
+        if (isGrowing){
+            let isGrowing = false;
 
-        while (length > 0){
-            let prevPoint = tail.get(length);
-            let nextPoint = tail.get(length - 1);
-
-            do prevPoint.change(nextPoint.getX(), nextPoint.getY());
-
-            let length = length - 1;
+            do tail.append(prevHead);
+            return;
         }
 
-        let prevPoint = tail.get(0);
-        do prevPoint.change(prevHead.getX(), prevHead.getY());
+        let i = 0;
+        let count = tail.getCount();
+        
+        while (i < count){ 
+            do tail.set(i, tail.get(i + 1));
 
-        do nextPoint.dispose();
-        do prevPoint.dispose();
+            let i = i + 1;
+        }
+
+        do tail.set(count - 1, prevHead);
 
         return;
     }
@@ -113,29 +111,57 @@ class Snake{
         return tail;
     }
 
+    method void setDirection(int d){
+        let direction = d;
+        return;
+    }
+
     method boolean isAlive(){
         return isAlive;
     }
 
     method void draw(){
         var Point position;
-        var int x, y, length;
+        var int x, y, count;
 
         let x = head.getX();
         let y = head.getY();
-        let length = tail.getCount();
+        let count = tail.getCount();
 
-        do Screen.drawRectangle(x, y, x + size / 2, y + size / 2);
+        do drawHead();
 
-        while (length > 0){
-            let position = tail.get(length);
+        while (count > 0){
+            let position = tail.get(count - 1);
             let x = position.getX();
             let y = position.getY();
             
-            do Screen.drawRectangle(x, y, x + size / 2, y + size / 2);
+            do Screen.drawRectangle(x, y, x + size, y + size);
 
-            let length = length - 1;
+            let count = count - 1;
         }
+
+        return;
+    }
+
+    method void drawHead(){
+        var int x, y, count;
+
+        let x = head.getX();
+        let y = head.getY();
+
+        do Screen.drawLine(x, y, x, y + size);
+        do Screen.drawLine(x, y, x + size, y);
+        do Screen.drawLine(x + size, y, x + size, y + size);
+        do Screen.drawLine(x + size, y + size, x, y + size);
+
+        return;
+    }
+
+    method void dispose(){
+        do head.dispose();
+        do tail.dispose();
+        do prevTail.dispose();
+        do Memory.deAlloc(this);
 
         return;
     }
