@@ -6,10 +6,11 @@ class Food{
     constructor Food new(int s){
         var int seed;
 
-        let seed = 123;
+        let seed = 200;
         let size = s;
         let random = Random.new(seed);
         let position = Point.new(size, size);
+        do changePosition();
 
         do random.addCallTime(random);
 
@@ -20,10 +21,10 @@ class Food{
         var int x, y;
         var Point newPosition;
 
-        let x = random.randRange((512 - size) / size);
-        let y = random.randRange((256 - size) / size);
-        let x = size * x + size / 2;
-        let y = size * y + size / 2;
+        let x = random.randRange((512 - (size * 3)) / size);
+        let y = random.randRange((256 - (size * 3)) / size);
+        let x = size * x + size;
+        let y = size * y + size;
 
         do position.dispose();
         let position = Point.new(x, y);
@@ -38,19 +39,7 @@ class Food{
         let y = position.getY();
 
         do Screen.setColor(true);
-		do Screen.drawCircle(x, y, size / 2);
-
-		return;
-    }
-
-    method void clear(){
-        var int x, y;
-        
-        let x = position.getX();
-        let y = position.getY();
-
-        do Screen.setColor(false);
-		do Screen.drawCircle(x, y, size / 2);
+		do Screen.drawCircle(x + (size / 2), y + (size / 2), size / 2 - 1);
 
 		return;
     }

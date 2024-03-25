@@ -1,86 +1,150 @@
 class Game{
-    field bool isAlive;
     field int score;
     field Snake snake;
     field Food food;
+    field int size;
+    field Walls walls;
 
-    constructor Game new(){
-        let isAlive = true;
+    constructor Game new(int size){
         let score = 0;
-        let snake = Snake.new(16); // How long?
-        let food = Food.new(16);
+        let snake = Snake.new(size);
+        let food = Food.new(size);
+        let walls = Walls.new(size);
+
+        do snake.grow();
 
         return this;
     }
     
     method void run(){
-        var char pressed;
-        var Point headLocation, foodLocation;
-        var int fx, fy, sx, sy;
-        var char resetOrfinish;
         // Scoreboard draw (where?)
 
         do food.draw();
         do snake.draw();
 
-        while(isAlive){ // Check whether snake.isAlive
-            let pressed = Keyboard.keyPressed();
+        while(snake.isAlive()){ // Check whether snake.isAlive
+            do Screen.clearScreen();
 
-			if (pressed = 131) {
-				do snake.setDirection(0);
-			}
-			if (pressed = 133) {
-				do snake.setDirection(1);
-			}
-			if (pressed = 130) {
-				do snake.setDirection(2);
-			}
-			if (pressed = 132) {
-				do snake.setDirection(3);
-			}
+            do readInput();
 
-				do snake.move(); // Add wall collision processing
-
-                let headLocation = snake.getHead();
-                let foodLocation = food.getPosition();
-
-                let fx = foodLocation.getX();
-                let fy = foodLocation.getY();
-                let sx = snakeLocation.getX();
-                let sy = snakeLocation.getY();
-                if (fx = sx){
-                    if (fy = sy){
-                        do food.changePosition();
-                        let score = score + 1;
-                        do snake.grow();
-                    }
+            if (checkCollisionWithFood(snake.getHead())){
+                do snake.grow();
+                do food.changePosition();
+                while (checkCollisionWithWalls(food.getPosition())){
+                    do food.changePosition();
                 }
 
-                // if left > sx or right < sx ... isAlive = 0
+                let score = score + 1; 
+            }
+
+            if (checkCollisionWithSnake(snake.getHead())){
+                do snake.kill();
+                return;
+            }
+
+            if (checkCollisionWithWalls(snake.getHead())){
+                do snake.kill();
+                return;
+            }
+
+            do snake.move(); // Add wall collision processing
+
+            do snake.draw();
+            do food.draw();
+            do walls.draw();
+            
+            do Sys.wait(250 - score);
         }
+        return;
+    }
 
-        do snake.dispose();
-        do food.dispose();
+    method bool checkCollisionWithSnake(Point point){
+        var int count;
+        var Point checkPoint;
+        var List tail;
 
-        while(~(resetOrfinish = 82) & ~(resetOrfinish = 140)) { // Determine logic of reset/exit keys
-				let resetOrfinish = Keyboard.keyPressed();
+        let tail = snake.getTail();
+        let count = tail.getCount(); 
+
+        while (count > 0){
+            let checkPoint = tail.get(count - 1);
+            if (point.getX() = checkPoint.getX()){
+                if (point.getY() = checkPoint.getY()){
+
+                    return true;
+                }
+            }
+
+            let count = count - 1;
         }
         
-        if (resetOrfinish = 82) {
-            do reset();
+        return false;
+    }
+
+    method bool checkCollisionWithWalls(Point point){
+        var int x, y, i;
+        var Point tl, br;
+        let x = point.getX();
+        let y = point.getY();
+        let tl = walls.getTopLeft();
+        let br = walls.getBottomRight();
+        let i = size + 1;
+        if (x = tl.getX()){
+            return true;
         }
-        if (resetOrfinish = 140) {
-            do Screen.clear();
-            return;
+        if (x = br.getX()){
+            return true;
+        }
+        if (y = tl.getY()){
+            return true;
+        }
+        if (y = br.getY()){
+            return true;
+        }
+        return false;
+    }
+
+    method bool checkCollisionWithFood(Point point){
+        var Point position;
+        let position = food.getPosition();
+        if (point.getX() = position.getX()){
+                if (point.getY() = position.getY()){
+
+                    return true;
+                }
+            }
+
+        return false;    
+    }
+
+    method void readInput(){
+        var char currentKey;
+        let currentKey = Keyboard.keyPressed();
+        if (currentKey = 131) {
+			do snake.setDirection(0);
+		}
+		if (currentKey = 133) {
+			do snake.setDirection(1);
+		}
+		if (currentKey = 130) {
+			do snake.setDirection(3);
+		}
+		if (currentKey = 132) {
+			do snake.setDirection(2);
+		}
+
+        if (currentKey = 82) {
+            // reset();
         }
 
         return;
     }
 
-    method void reset(){
-        let score = 0;
-        do Screen.clear();
-
+    method void dispose(){
+        do food.dispose();
+        do snake.dispose();
+        do walls.dispose();
+        do Memory.deAlloc(this);
         return;
     }
 }

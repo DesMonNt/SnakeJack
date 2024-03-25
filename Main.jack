@@ -1,29 +1,18 @@
 class Main {
     function void main() {
-        var Snake s;
-        var int i;
-        var Food f;
+        var Game game;
 
-        let s = Snake.new(16);
-        let f = Food.new(16);
-        let i = 0;
-    
-        do s.setDirection(2);
+        while (true){
+            let game = Game.new(16);
+            do game.run();
+            do game.dispose();
 
-        while (i < 100){
-            if  (i < 3){
-                do s.grow();
+            // gameover
+
+            while(~(Keyboard.keyPressed() = 82)){ 
             }
-
-            let i = i + 1;
-
-            do Screen.clearScreen();
-            do s.move();
-            do s.draw();
-            do f.draw();
-            do Sys.wait(500);
+        
         }
-
         return; 
-        }
+    }
 }

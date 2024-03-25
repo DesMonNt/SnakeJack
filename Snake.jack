@@ -17,28 +17,9 @@ class Snake{
 
         let isAlive = true;
         let direction = 0;
+        let isGrowing = false;
 
         return this;
-    }
-
-    method bool getCollisionWithSelf(){
-        var int count;
-        var Point checkPoint;
-
-        let count = tail.getCount() - 1; 
-
-        while (count > -1){
-            let checkPoint = tail.get(count);
-            if (head.getX() = checkPoint.getX()){
-                if (head.getY() = checkPoint.getY()){
-                    return true;
-                }
-            }
-
-            let count = count - 1;
-        }
-        
-        return false;
     }
 
     method void grow(){
@@ -120,6 +101,11 @@ class Snake{
         return isAlive;
     }
 
+    method void kill(){
+        let isAlive = false;
+        return;
+    }
+
     method void draw(){
         var Point position;
         var int x, y, count;
@@ -160,7 +146,6 @@ class Snake{
     method void dispose(){
         do head.dispose();
         do tail.dispose();
-        do prevTail.dispose();
         do Memory.deAlloc(this);
 
         return;
