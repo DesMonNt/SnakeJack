@@ -1,0 +1,24 @@
+class ScoreBoard{
+    field string text;
+    field Point position;
+
+    constructor ScoreBoard new(string input, Point point){
+        let text = input;
+        let position = point;
+        return this;
+    }
+
+    method void draw(int score){
+        do Output.moveCursor(position.getX(), position.getY());
+        do Output.printString(text);
+        do Output.printInt(score);
+        return;
+    }
+
+    method void dispose(){
+        // do text.dispose();
+        do position.dispose();
+        // do Sys.deAlloc(this);
+        return;
+    }
+}

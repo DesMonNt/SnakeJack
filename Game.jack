@@ -1,5 +1,5 @@
 class Game{
-    // field ScoreBoard scoreBoard;
+    field ScoreBoard scoreBoard;
     field int score;
     field Snake snake;
     field Food food;
@@ -8,7 +8,7 @@ class Game{
     field int currentTime;
 
     constructor Game new(int size){
-        // let scoreBoard = ScoreBoard.new("Score: ");
+        let scoreBoard = ScoreBoard.new("Score: ", Point.new(0, 2));
         let score = 0;
         let snake = Snake.new(size);
         let food = Food.new(size);
@@ -22,6 +22,7 @@ class Game{
         do snake.move();
         do food.draw();
         do walls.draw();
+        do scoreBoard.draw(score);
 
         while(true){
             let currentTime = currentTime + 1;
@@ -31,6 +32,7 @@ class Game{
             if (checkCollisionWithFood(snake.getHead())){
 
                 let score = score + 1;
+                do scoreBoard.draw(score);
 
                 do snake.grow();
 
@@ -44,12 +46,10 @@ class Game{
             }
 
             if (checkCollisionWithSnake(snake.getHead())){
-                do Screen.clearScreen();
                 return;
             }
 
             if (checkCollisionWithWalls(snake.getHead())){
-                do Screen.clearScreen();
                 return;
             }
 
@@ -60,8 +60,6 @@ class Game{
             
             do Sys.wait(250 - score);
         }
-
-        do Screen.clearScreen();
 
         return;
     }
@@ -147,11 +145,15 @@ class Game{
         return;
     }
 
+    method int getScore(){
+        return score;
+    }
+
     method void dispose(){
         do food.dispose();
         do snake.dispose();
         do walls.dispose();
-        // do scoreBoard.dispose();
+        do scoreBoard.dispose();
         do Memory.deAlloc(this);
         
         return;
