@@ -55,4 +55,10 @@ class Food{
 
         return;
     }
+
+    method void changeSeed(int newSeed){
+        do random.dispose();
+        let random = Random.new(newSeed);
+        return;
+    }
 }
