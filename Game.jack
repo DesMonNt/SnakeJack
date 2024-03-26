@@ -1,15 +1,19 @@
 class Game{
+    // field ScoreBoard scoreBoard;
     field int score;
     field Snake snake;
     field Food food;
     field int size;
     field Walls walls;
+    field int currentTime;
 
     constructor Game new(int size){
+        // let scoreBoard = ScoreBoard.new("Score: ");
         let score = 0;
         let snake = Snake.new(size);
         let food = Food.new(size);
         let walls = Walls.new(size);
+        let currentTime = 0;
 
         do snake.grow();
 
@@ -17,7 +21,6 @@ class Game{
     }
     
     method void run(){
-        // Scoreboard draw (where?)
 
         do food.draw();
         do snake.draw();
@@ -49,9 +52,14 @@ class Game{
 
             do snake.move(); // Add wall collision processing
 
+            // do scoreBoard.draw(score);
             do snake.draw();
             do food.draw();
             do walls.draw();
+
+            let currentTime = currentTime + 1;
+
+            do food.changeSeed(currentTime * 5 + score * 2);
             
             do Sys.wait(250 - score);
         }
@@ -144,6 +152,7 @@ class Game{
         do food.dispose();
         do snake.dispose();
         do walls.dispose();
+        // do scoreBoard.dispose();
         do Memory.deAlloc(this);
         return;
     }
