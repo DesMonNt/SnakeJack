@@ -34,10 +34,6 @@ class Main {
         do Output.printInt(score);
         do Output.moveCursor(12, 23);
         do Output.printString(text3);
-        
-        // do text1.dispose();
-        // do text2.dispose();
-        // do text3.dispose();
 
         return;
     }

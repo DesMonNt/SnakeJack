@@ -16,9 +16,8 @@ class ScoreBoard{
     }
 
     method void dispose(){
-        // do text.dispose();
         do position.dispose();
-        // do Sys.deAlloc(this);
+        do Memory.deAlloc(this);
         return;
     }
 }
