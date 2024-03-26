@@ -1,0 +1,161 @@
+class Game{
+    field ScoreBoard scoreBoard;
+    field int score;
+    field Snake snake;
+    field Food food;
+    field int size;
+    field Walls walls;
+    field int currentTime;
+
+    constructor Game new(int size){
+        let scoreBoard = ScoreBoard.new("Score: ", Point.new(0, 2));
+        let score = 0;
+        let snake = Snake.new(size);
+        let food = Food.new(size);
+        let walls = Walls.new(size);
+        let currentTime = 0;
+
+        return this;
+    }
+    
+    method void run(){
+        do snake.move();
+        do food.draw();
+        do walls.draw();
+        do scoreBoard.draw(score);
+
+        while(true){
+            let currentTime = currentTime + 1;
+
+            do readInput();
+
+            if (checkCollisionWithFood(snake.getHead())){
+
+                let score = score + 1;
+                do scoreBoard.draw(score);
+
+                do snake.grow();
+
+                do food.clear();
+                do food.changeSeed(currentTime * 5 + score * 2);
+
+                do food.changePosition();  
+                while (checkCollisionWithWalls(food.getPosition()) | checkCollisionWithSnake(food.getPosition())){
+                    do food.changePosition();
+                }
+            }
+
+            if (checkCollisionWithSnake(snake.getHead())){
+                return;
+            }
+
+            if (checkCollisionWithWalls(snake.getHead())){
+                return;
+            }
+
+            do snake.move();
+            do snake.clear();
+            do snake.draw();
+            do food.draw();
+            
+            do Sys.wait(250 - score);
+        }
+
+        return;
+    }
+
+    method bool checkCollisionWithSnake(Point point){
+        var int count;
+        var Point checkPoint;
+        var List tail;
+
+        let tail = snake.getTail();
+        let count = tail.getCount(); 
+
+        while (count > 0){
+            let checkPoint = tail.get(count - 1);
+            if (point.getX() = checkPoint.getX()){
+                if (point.getY() = checkPoint.getY()){
+
+                    return true;
+                }
+            }
+
+            let count = count - 1;
+        }
+        
+        return false;
+    }
+
+    method bool checkCollisionWithWalls(Point point){
+        var int x, y;
+        var Point tl, br;
+        let x = point.getX();
+        let y = point.getY();
+        let tl = walls.getTopLeft();
+        let br = walls.getBottomRight();
+        
+        if (x = tl.getX()){
+            return true;
+        }
+        if (x = br.getX()){
+            return true;
+        }
+        if (y = tl.getY()){
+            return true;
+        }
+        if (y = br.getY()){
+            return true;
+        }
+
+        return false;
+    }
+
+    method bool checkCollisionWithFood(Point point){
+        var Point position;
+        let position = food.getPosition();
+
+        if (point.getX() = position.getX()){
+                if (point.getY() = position.getY()){
+
+                    return true;
+                }
+            }
+
+        return false;    
+    }
+
+    method void readInput(){
+        var char currentKey;
+        let currentKey = Keyboard.keyPressed();
+
+        if (currentKey = 131) {
+			do snake.setDirection(0);
+		}
+		if (currentKey = 133) {
+			do snake.setDirection(1);
+		}
+        if (currentKey = 132) {
+			do snake.setDirection(2);
+		}
+		if (currentKey = 130) {
+			do snake.setDirection(3);
+		}
+
+        return;
+    }
+
+    method int getScore(){
+        return score;
+    }
+
+    method void dispose(){
+        do food.dispose();
+        do snake.dispose();
+        do walls.dispose();
+        do scoreBoard.dispose();
+        do Memory.deAlloc(this);
+        
+        return;
+    }
+}

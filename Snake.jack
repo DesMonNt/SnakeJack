@@ -1,0 +1,155 @@
+class Snake{
+    field Point head;
+    field List tail;
+    field int direction;
+    field int size;
+    field boolean isGrowing;
+    field Point clearPoint;
+
+    constructor Snake new(int s){
+        let size = s;
+        let head = Point.new(128, 128);
+        let tail = List.new();
+        let direction = 0;
+        let isGrowing = false;
+
+        do tail.append(Point.new(128, size + 128));
+        do tail.append(Point.new(128, 2 * size + 128));
+
+        return this;
+    }
+
+    method void grow(){
+        let isGrowing = true;
+        return;
+    }
+
+    method void move(){
+        var int x, y, dx, dy;
+        var Point prevHead;
+
+        let x = head.getX();
+        let y = head.getY();
+        let prevHead = Point.new(x, y);
+        let clearPoint = tail.get(0);
+        
+        if (direction = 0){
+            let dy = -1 * size;
+        }
+
+        if (direction = 1){
+            let dy = size;
+        }
+
+        if (direction = 2){
+            let dx = size;
+        }
+
+        if (direction = 3){
+            let dx = -1 * size;
+        }
+
+        do head.dispose();
+        let head = Point.new(x + dx, y + dy);
+
+        do updateTail(prevHead);
+
+        return;
+    }
+
+    method void updateTail(Point prevHead){
+        var int i, count;
+        var Point nextPoint, prevPoint;
+
+        if (isGrowing){
+            let isGrowing = false;
+
+            do tail.append(prevHead);
+            return;
+        }
+
+        let i = 0;
+        let count = tail.getCount();
+        
+        while (i < count){ 
+            do tail.set(i, tail.get(i + 1));
+
+            let i = i + 1;
+        }
+
+        do tail.set(count - 1, prevHead);
+
+        return;
+    }
+
+    method Point getHead(){
+        return head;
+    }
+
+    method List getTail(){
+        return tail;
+    }
+
+    method void setDirection(int d){
+        let direction = d;
+        return;
+    }
+
+    method void draw(){
+        var Point position;
+        var int x, y, count;
+
+        let x = head.getX();
+        let y = head.getY();
+        let count = tail.getCount();
+
+        do drawHead();
+
+        while (count > 0){
+            let position = tail.get(count - 1);
+            let x = position.getX();
+            let y = position.getY();
+            
+            do Screen.drawRectangle(x, y, x + size, y + size);
+
+            let count = count - 1;
+        }
+
+        return;
+    }
+
+    method void clear(){
+        var int x, y;
+
+        let x = clearPoint.getX();
+        let y = clearPoint.getY();
+        
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        do Screen.setColor(true);
+        
+        return;
+    }
+
+    method void drawHead(){
+        var int x, y, count;
+
+        let x = head.getX();
+        let y = head.getY();
+
+        do Screen.drawLine(x, y, x, y + size);
+        do Screen.drawLine(x, y, x + size, y);
+        do Screen.drawLine(x + size, y, x + size, y + size);
+        do Screen.drawLine(x + size, y + size, x, y + size);
+
+        return;
+    }
+
+    method void dispose(){
+        do head.dispose();
+        do tail.dispose();
+        do Memory.deAlloc(this);
+
+        return;
+    }
+}

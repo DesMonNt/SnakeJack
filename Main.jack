@@ -1,14 +1,40 @@
 class Main {
     function void main() {
-        var str;
-        
-        let str = "Hello World";
+        var Game game;
+        var int score;
 
-        do Output.printString(str);
-        do Output.println(); 
+        while (true){
+            let game = Game.new(16);
+            do game.run();
+            let score = game.getScore();
+            do game.dispose();
+            do Screen.clearScreen();
 
-        str.dispose()
+            do Main.drawGameOver(score);
+
+            while(~(Keyboard.keyPressed() = 82)){ 
+            }
+            do Screen.clearScreen();
+        }
 
         return; 
-        }
+    }
+
+    function void drawGameOver(int score){
+        var string text1, text2, text3;
+
+        let text1 = "YOU DIED";
+        let text2 = "Score: ";
+        let text3 = "Press R to restart";
+
+        do Output.moveCursor(9, 28);
+        do Output.printString(text1);
+        do Output.moveCursor(10, 28);
+        do Output.printString(text2);
+        do Output.printInt(score);
+        do Output.moveCursor(12, 23);
+        do Output.printString(text3);
+
+        return;
+    }
 }
