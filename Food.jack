@@ -44,6 +44,14 @@ class Food{
 		return;
     }
 
+    method void clear(){
+        do Screen.setColor(false);
+        do draw();
+        do Screen.setColor(true);
+
+        return;
+    }
+
     method Point getPosition(){
         return position;
     }

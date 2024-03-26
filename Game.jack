@@ -15,54 +15,54 @@ class Game{
         let walls = Walls.new(size);
         let currentTime = 0;
 
-        do snake.grow();
-
         return this;
     }
     
     method void run(){
-
+        do snake.move();
         do food.draw();
-        do snake.draw();
+        do walls.draw();
 
-        while(snake.isAlive()){ // Check whether snake.isAlive
-            do Screen.clearScreen();
+        while(true){
+            let currentTime = currentTime + 1;
 
             do readInput();
 
             if (checkCollisionWithFood(snake.getHead())){
+
+                let score = score + 1;
+
                 do snake.grow();
-                do food.changePosition();
-                while (checkCollisionWithWalls(food.getPosition())){
+
+                do food.clear();
+                do food.changeSeed(currentTime * 5 + score * 2);
+
+                do food.changePosition();  
+                while (checkCollisionWithWalls(food.getPosition()) | checkCollisionWithSnake(food.getPosition())){
                     do food.changePosition();
                 }
-
-                let score = score + 1; 
             }
 
             if (checkCollisionWithSnake(snake.getHead())){
-                do snake.kill();
+                do Screen.clearScreen();
                 return;
             }
 
             if (checkCollisionWithWalls(snake.getHead())){
-                do snake.kill();
+                do Screen.clearScreen();
                 return;
             }
 
-            do snake.move(); // Add wall collision processing
-
-            // do scoreBoard.draw(score);
+            do snake.move();
+            do snake.clear();
             do snake.draw();
             do food.draw();
-            do walls.draw();
-
-            let currentTime = currentTime + 1;
-
-            do food.changeSeed(currentTime * 5 + score * 2);
             
             do Sys.wait(250 - score);
         }
+
+        do Screen.clearScreen();
+
         return;
     }
 
@@ -90,13 +90,13 @@ class Game{
     }
 
     method bool checkCollisionWithWalls(Point point){
-        var int x, y, i;
+        var int x, y;
         var Point tl, br;
         let x = point.getX();
         let y = point.getY();
         let tl = walls.getTopLeft();
         let br = walls.getBottomRight();
-        let i = size + 1;
+        
         if (x = tl.getX()){
             return true;
         }
@@ -109,12 +109,14 @@ class Game{
         if (y = br.getY()){
             return true;
         }
+
         return false;
     }
 
     method bool checkCollisionWithFood(Point point){
         var Point position;
         let position = food.getPosition();
+
         if (point.getX() = position.getX()){
                 if (point.getY() = position.getY()){
 
@@ -128,22 +130,19 @@ class Game{
     method void readInput(){
         var char currentKey;
         let currentKey = Keyboard.keyPressed();
+
         if (currentKey = 131) {
 			do snake.setDirection(0);
 		}
 		if (currentKey = 133) {
 			do snake.setDirection(1);
 		}
+        if (currentKey = 132) {
+			do snake.setDirection(2);
+		}
 		if (currentKey = 130) {
 			do snake.setDirection(3);
 		}
-		if (currentKey = 132) {
-			do snake.setDirection(2);
-		}
-
-        if (currentKey = 82) {
-            // reset();
-        }
 
         return;
     }
@@ -154,6 +153,7 @@ class Game{
         do walls.dispose();
         // do scoreBoard.dispose();
         do Memory.deAlloc(this);
+        
         return;
     }
 }

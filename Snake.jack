@@ -3,21 +3,18 @@ class Snake{
     field List tail;
     field int direction;
     field int size;
-    field boolean isAlive;
     field boolean isGrowing;
+    field Point clearPoint;
 
     constructor Snake new(int s){
-        var Point tailTile;
-
         let size = s;
         let head = Point.new(128, 128);
-        let tailTile = Point.new(128, 128 + size);
-
         let tail = List.new();
-
-        let isAlive = true;
         let direction = 0;
         let isGrowing = false;
+
+        do tail.append(Point.new(128, size + 128));
+        do tail.append(Point.new(128, 2 * size + 128));
 
         return this;
     }
@@ -34,6 +31,7 @@ class Snake{
         let x = head.getX();
         let y = head.getY();
         let prevHead = Point.new(x, y);
+        let clearPoint = tail.get(0);
         
         if (direction = 0){
             let dy = -1 * size;
@@ -97,15 +95,6 @@ class Snake{
         return;
     }
 
-    method boolean isAlive(){
-        return isAlive;
-    }
-
-    method void kill(){
-        let isAlive = false;
-        return;
-    }
-
     method void draw(){
         var Point position;
         var int x, y, count;
@@ -126,6 +115,19 @@ class Snake{
             let count = count - 1;
         }
 
+        return;
+    }
+
+    method void clear(){
+        var int x, y;
+
+        let x = clearPoint.getX();
+        let y = clearPoint.getY();
+        
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x, y, x + size, y + size);
+        do Screen.setColor(true);
+        
         return;
     }
 
