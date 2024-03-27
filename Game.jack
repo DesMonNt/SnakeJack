@@ -128,10 +128,6 @@ class Game{
     method void checkInput(){
         var int i;
 
-        if (isDirectionChanged){
-            return;
-        }
-
         let i = Math.max(150 - (score * 5), 0);
 
         while (i > 0){
@@ -148,19 +144,19 @@ class Game{
         var char currentKey;
         let currentKey = Keyboard.keyPressed();
 
-        if (currentKey = 131) {
+        if (currentKey = 131 & ~(snake.getDirection() = 1)) {
 			do snake.setDirection(0);
 		}
 
-		if (currentKey = 133) {
+		if (currentKey = 133 & ~(snake.getDirection() = 0)) {
 			do snake.setDirection(1);
 		}
 
-        if (currentKey = 132) {
+        if (currentKey = 132 & ~(snake.getDirection() = 3)) {
 			do snake.setDirection(2);
 		}
 
-		if (currentKey = 130) {
+		if (currentKey = 130 & ~(snake.getDirection() = 2)) {
 			do snake.setDirection(3);
 		}
 
