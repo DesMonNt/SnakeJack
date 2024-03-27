@@ -2,17 +2,27 @@ class ScoreBoard{
     field string text;
     field Point position;
 
-    constructor ScoreBoard new(string input, Point point){
-        let text = input;
+    static string text;
+
+    constructor ScoreBoard new(Point point){
         let position = point;
         return this;
     }
 
     method void draw(int score){
         do Output.moveCursor(position.getX(), position.getY());
-        do Output.printString(text);
+        do Output.printString(ScoreBoard.getText());
         do Output.printInt(score);
         return;
+    }
+
+    function void setText(string input){
+        let text = input;
+        return;
+    }
+
+    function string getText(){
+        return text;
     }
 
     method void dispose(){

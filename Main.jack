@@ -1,7 +1,15 @@
 class Main {
+
+    static string fisrtStr, secondStr, thirdStr;
+
     function void main() {
         var Game game;
         var int score;
+
+        do ScoreBoard.setText("Score: ");
+        let fisrtStr = "YOU DIED";
+        let secondStr = "Score: ";
+        let thirdStr = "Press R to restart";
 
         while (true){
             let game = Game.new(16);
@@ -12,8 +20,8 @@ class Main {
 
             do Main.drawGameOver(score);
 
-            while(~(Keyboard.keyPressed() = 82)){ 
-            }
+            while(~(Keyboard.keyPressed() = 82)){ }
+
             do Screen.clearScreen();
         }
 
@@ -21,19 +29,13 @@ class Main {
     }
 
     function void drawGameOver(int score){
-        var string text1, text2, text3;
-
-        let text1 = "YOU DIED";
-        let text2 = "Score: ";
-        let text3 = "Press R to restart";
-
         do Output.moveCursor(9, 28);
-        do Output.printString(text1);
+        do Output.printString(fisrtStr);
         do Output.moveCursor(10, 28);
-        do Output.printString(text2);
+        do Output.printString(secondStr);
         do Output.printInt(score);
         do Output.moveCursor(12, 23);
-        do Output.printString(text3);
+        do Output.printString(thirdStr);
 
         return;
     }

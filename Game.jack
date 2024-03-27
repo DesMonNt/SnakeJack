@@ -8,38 +8,32 @@ class Game{
     field int currentTime;
 
     constructor Game new(int size){
-        let scoreBoard = ScoreBoard.new("Score: ", Point.new(0, 2));
-        let score = 0;
+        let scoreBoard = ScoreBoard.new(Point.new(0, 2));
         let snake = Snake.new(size);
         let food = Food.new(size);
         let walls = Walls.new(size);
+
         let currentTime = 0;
+        let score = 0;
 
         return this;
     }
     
     method void run(){
-        do snake.move();
-        do food.draw();
-        do walls.draw();
         do scoreBoard.draw(score);
+        do walls.draw();
+        do food.draw();
 
         while(true){
-            let currentTime = currentTime + 1;
-
-            do readInput();
-
             if (checkCollisionWithFood(snake.getHead())){
-
                 let score = score + 1;
+
                 do scoreBoard.draw(score);
-
                 do snake.grow();
-
                 do food.clear();
                 do food.changeSeed(currentTime * 5 + score * 2);
-
                 do food.changePosition();  
+
                 while (checkCollisionWithWalls(food.getPosition()) | checkCollisionWithSnake(food.getPosition())){
                     do food.changePosition();
                 }
@@ -53,12 +47,16 @@ class Game{
                 return;
             }
 
+            let currentTime = currentTime + 1;
+
+            do checkInput();
+
             do snake.move();
             do snake.clear();
             do snake.draw();
             do food.draw();
-            
-            do Sys.wait(250 - score);
+
+            do Sys.wait(25);
         }
 
         return;
@@ -74,16 +72,16 @@ class Game{
 
         while (count > 0){
             let checkPoint = tail.get(count - 1);
+
             if (point.getX() = checkPoint.getX()){
                 if (point.getY() = checkPoint.getY()){
-
                     return true;
                 }
             }
 
             let count = count - 1;
         }
-        
+    
         return false;
     }
 
@@ -98,12 +96,15 @@ class Game{
         if (x = tl.getX()){
             return true;
         }
+
         if (x = br.getX()){
             return true;
         }
+
         if (y = tl.getY()){
             return true;
         }
+
         if (y = br.getY()){
             return true;
         }
@@ -117,12 +118,30 @@ class Game{
 
         if (point.getX() = position.getX()){
                 if (point.getY() = position.getY()){
-
                     return true;
                 }
             }
 
         return false;    
+    }
+    
+    method void checkInput(){
+        var int i;
+
+        if (isDirectionChanged){
+            return;
+        }
+
+        let i = Math.max(150 - (score * 5), 0);
+
+        while (i > 0){
+            do readInput();
+            do Sys.wait(1);
+
+            let i = i - 1;
+        }
+
+        return;
     }
 
     method void readInput(){
@@ -132,12 +151,15 @@ class Game{
         if (currentKey = 131) {
 			do snake.setDirection(0);
 		}
+
 		if (currentKey = 133) {
 			do snake.setDirection(1);
 		}
+
         if (currentKey = 132) {
 			do snake.setDirection(2);
 		}
+
 		if (currentKey = 130) {
 			do snake.setDirection(3);
 		}

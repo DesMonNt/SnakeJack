@@ -14,7 +14,7 @@ class Snake{
         let isGrowing = false;
 
         do tail.append(Point.new(128, size + 128));
-        do tail.append(Point.new(128, 2 * size + 128));
+        do tail.append(Point.new(128, size + 128));
 
         return this;
     }
@@ -59,7 +59,7 @@ class Snake{
 
     method void updateTail(Point prevHead){
         var int i, count;
-        var Point nextPoint, prevPoint;
+        var Point nextPoint;
 
         if (isGrowing){
             let isGrowing = false;
@@ -88,6 +88,10 @@ class Snake{
 
     method List getTail(){
         return tail;
+    }
+
+    method int getDirection(){
+        return direction;
     }
 
     method void setDirection(int d){
@@ -149,7 +153,6 @@ class Snake{
         do head.dispose();
         do tail.dispose();
         do Memory.deAlloc(this);
-
         return;
     }
 }
